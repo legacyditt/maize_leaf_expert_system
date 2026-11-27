@@ -1,5 +1,35 @@
 [
   {
+    "timestamp": "2026-11-28 03:47:56",
+    "image_name": "018.jpg",
+    "cnn_label": "Karat",
+    "cnn_confidence": 0.903887152671814,
+    "expert_label": "Karat",
+    "expert_cf": 0.994,
+    "status_match": "SESUAI",
+    "final_decision": "Terdiagnosis: Karat (Sangat yakin, CF = 0.99)"
+  },
+  {
+    "timestamp": "2026-11-28 03:47:10",
+    "image_name": "107.jpg",
+    "cnn_label": "Hawar",
+    "cnn_confidence": 0.9974825978279114,
+    "expert_label": "Tidak Terbukti",
+    "expert_cf": 0.0,
+    "status_match": "TIDAK SESUAI",
+    "final_decision": "Sistem tidak dapat menentukan kondisi daun"
+  },
+  {
+    "timestamp": "2026-11-28 03:37:53",
+    "image_name": "018.jpg",
+    "cnn_label": "Karat",
+    "cnn_confidence": 0.903887152671814,
+    "expert_label": "Karat",
+    "expert_cf": 0.99,
+    "status_match": "SESUAI",
+    "final_decision": "Terdiagnosis: Karat (Sangat yakin, CF = 0.99)"
+  },
+  {
     "timestamp": "2026-11-28 02:19:52",
     "image_name": "018.jpg",
     "cnn_label": "Karat",
