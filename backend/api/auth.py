@@ -10,9 +10,15 @@ import time
 
 from fastapi import Header, HTTPException, status
 
+_DEFAULT_USERNAME = "admin"
 _DEFAULT_PASSWORD = "admin123"
 _TOKEN_TTL_SECONDS = 60 * 60 * 12  # 12 jam
 _SIGNING_SECRET = os.environ.get("MAIZE_AUTH_SECRET", secrets.token_hex(32)).encode("utf-8")
+
+
+def get_admin_username() -> str:
+    """Mengembalikan username Admin dari env `MAIZE_ADMIN_USERNAME` atau default lokal."""
+    return os.environ.get("MAIZE_ADMIN_USERNAME", _DEFAULT_USERNAME)
 
 
 def get_admin_password() -> str:
@@ -24,6 +30,14 @@ def verify_admin_password(password: str) -> bool:
     """Memverifikasi password dengan perbandingan konstan waktu."""
     expected = get_admin_password().encode("utf-8")
     return hmac.compare_digest(password.encode("utf-8"), expected)
+
+
+def verify_admin_credentials(username: str, password: str) -> bool:
+    """Memverifikasi username dan password Admin dengan perbandingan konstan waktu."""
+    expected_user = get_admin_username().encode("utf-8")
+    user_ok = hmac.compare_digest(username.strip().encode("utf-8"), expected_user)
+    pass_ok = verify_admin_password(password)
+    return user_ok and pass_ok
 
 
 def create_access_token(role: str = "admin") -> str:

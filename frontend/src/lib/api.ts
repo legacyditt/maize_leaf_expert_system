@@ -117,6 +117,151 @@ export async function evaluateExpertSession(
   return (await response.json()) as EvaluateResponse
 }
 
+export interface LoginResponse {
+  access_token: string
+  token_type: string
+}
+
+export interface KnowledgeBaseData {
+  facts: Record<string, string>
+  mb_md: Record<string, Record<string, [number, number]>>
+  goal_order: string[]
+  cf_accept: number
+  cf_dugaan: number
+}
+
+export interface ModelStatusData {
+  exists: boolean
+  filename: string
+  size_mb: number
+  keras_version: string
+  input_size: number
+  class_names: string[]
+}
+
+export class UnauthorizedError extends Error {
+  constructor(message = 'Sesi Admin berakhir. Silakan login kembali.') {
+    super(message)
+    this.name = 'UnauthorizedError'
+  }
+}
+
+async function parseErrorDetail(response: Response): Promise<string> {
+  const errBody = await response.json().catch(() => ({}))
+  return typeof errBody?.detail === 'string'
+    ? errBody.detail
+    : `Server mengembalikan status ${response.status}`
+}
+
+/** Login Admin ke endpoint FastAPI `/api/auth/login`. */
+export async function adminLogin(
+  username: string,
+  password: string,
+): Promise<LoginResponse> {
+  const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, password }),
+  })
+
+  if (!response.ok) {
+    throw new Error(await parseErrorDetail(response))
+  }
+
+  return (await response.json()) as LoginResponse
+}
+
+async function adminFetch<T>(
+  path: string,
+  token: string,
+  init?: RequestInit,
+): Promise<T> {
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    ...init,
+    headers: {
+      ...(init?.headers ?? {}),
+      Authorization: `Bearer ${token}`,
+    },
+  })
+
+  if (response.status === 401 || response.status === 403) {
+    throw new UnauthorizedError(await parseErrorDetail(response))
+  }
+  if (!response.ok) {
+    throw new Error(await parseErrorDetail(response))
+  }
+
+  return (await response.json()) as T
+}
+
+export function fetchAdminKb(token: string): Promise<KnowledgeBaseData> {
+  return adminFetch<KnowledgeBaseData>('/api/admin/kb', token)
+}
+
+export function updateAdminKb(
+  token: string,
+  payload: KnowledgeBaseData,
+): Promise<KnowledgeBaseData> {
+  return adminFetch<KnowledgeBaseData>('/api/admin/kb', token, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  })
+}
+
+export function resetAdminKb(token: string): Promise<KnowledgeBaseData> {
+  return adminFetch<KnowledgeBaseData>('/api/admin/kb/reset', token, {
+    method: 'POST',
+  })
+}
+
+export function fetchAdminModelStatus(token: string): Promise<ModelStatusData> {
+  return adminFetch<ModelStatusData>('/api/admin/model/status', token)
+}
+
+export function fetchAdminHistory(token: string): Promise<HistoryResponse> {
+  return adminFetch<HistoryResponse>('/api/admin/history', token)
+}
+
+export async function uploadAdminModel(
+  token: string,
+  file: File,
+): Promise<ModelStatusData> {
+  const formData = new FormData()
+  formData.append('file', file)
+  return adminFetch<ModelStatusData>('/api/admin/model/upload', token, {
+    method: 'POST',
+    body: formData,
+  })
+}
+
+export function clearAdminHistory(token: string): Promise<{ status: string }> {
+  return adminFetch<{ status: string }>('/api/admin/history', token, {
+    method: 'DELETE',
+  })
+}
+
+export async function downloadAdminHistoryCsv(token: string): Promise<void> {
+  const response = await fetch(`${API_BASE_URL}/api/admin/history/csv`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  if (response.status === 401 || response.status === 403) {
+    throw new UnauthorizedError(await parseErrorDetail(response))
+  }
+  if (!response.ok) {
+    throw new Error(await parseErrorDetail(response))
+  }
+  const blob = await response.blob()
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = 'riwayat_diagnosis_jagung.csv'
+  document.body.appendChild(link)
+  link.click()
+  link.remove()
+  URL.revokeObjectURL(url)
+}
+
 /** Mengambil daftar riwayat diagnosis dari endpoint FastAPI `/api/history`. */
 export async function fetchDiagnosisHistory(): Promise<HistoryResponse> {
   const response = await fetch(`${API_BASE_URL}/api/history`)

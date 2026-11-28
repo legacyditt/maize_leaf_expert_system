@@ -6,16 +6,17 @@ import {
   type EvaluateResponse,
   type PredictResponse,
 } from "@/lib/api";
+import { formatSymptomQuestion } from "@/lib/format-question";
 import { cn } from "@/lib/utils";
 
 const SYMPTOM_HINTS: Record<string, string> = {
-  G1: "Ciri khas karat daun: bintik serbuk cokelat kemerahan yang mudah menempel jika disentuh.",
-  G2: "Biasanya terlihat bila serangan sudah meluas hingga warna daun memudar atau mengering.",
-  G3: "Periksa sisi atas dan balik daun jagung untuk memastikan sebaran bintik serbuk.",
-  G4: "Ciri khas hawar daun: bercak memanjang berbentuk elips atau seperti cerutu.",
-  G5: "Sering muncul sebagai bercak tahap awal sebelum melebar dan mengering.",
-  G6: "Daun terlihat hijau normal tanpa bintik cokelat ataupun bercak memanjang.",
-  G7: "Seluruh helai daun tampak segar dan utuh.",
+  G1: "Bintik ini terasa agak menonjol dan serbuknya bisa menempel di jari saat disentuh.",
+  G2: "Biasanya terlihat kalau serangan sudah agak lama sehingga warna hijau daun memudar.",
+  G3: "Coba periksa permukaan atas daun dan bagian bawahnya untuk memastikan.",
+  G4: "Bentuknya seperti noda lonjong atau pita lebar yang memanjang di permukaan daun dan tampak kering.",
+  G5: "Ini biasanya tanda awal bercak sebelum melebar dan berubah kecokelatan.",
+  G6: "Daun terlihat hijau segar normal, tidak ada noda cokelat atau bercak melebar.",
+  G7: "Helai daun terlihat utuh, kuat, dan tidak layu.",
 };
 
 interface ImageUploadCardProps {
@@ -87,13 +88,13 @@ export function ImageUploadCard({
   return (
     <div className="mx-auto max-w-5xl space-y-8">
       {/* Header Brand & Judul Halaman */}
-      <header className="flex flex-col gap-5 border-b border-[#E4E4DF] pb-6 sm:flex-row sm:items-end sm:justify-between">
+      <header className="flex flex-col gap-5 border-b border-[#C6DEC9] pb-6 sm:flex-row sm:items-end sm:justify-between">
         <div className="space-y-3">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-[#E4E4DF] bg-white">
+            <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-[#B7D7BD] bg-[#DCEFE0]">
               <svg
-                width="22"
-                height="26"
+                width="32"
+                height="36"
                 viewBox="0 0 28 32"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -140,7 +141,7 @@ export function ImageUploadCard({
       </header>
 
       {/* Panel Utama: Foto (5 kolom) & Validasi Gejala (7 kolom) */}
-      <div className="grid gap-8 rounded-xl border border-[#E4E4DF] bg-white p-6 md:grid-cols-12 md:p-8">
+      <div className="grid gap-8 rounded-xl border border-[#C6DEC9] bg-white p-6 md:grid-cols-12 md:p-8">
         {/* Kolom Kiri: Dropzone & Preview Foto */}
         <div className="flex flex-col justify-between space-y-4 md:col-span-5">
           <div
@@ -157,8 +158,8 @@ export function ImageUploadCard({
             className={cn(
               "flex min-h-[280px] flex-1 cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed p-5 text-center transition-colors",
               isDragging
-                ? "border-[#1B4332] bg-[#1B4332]/5"
-                : "border-[#E4E4DF] bg-[#F8F7F4] hover:border-zinc-400",
+                ? "border-[#1B4332] bg-[#DCEFE0]/70"
+                : "border-[#B7D7BD] bg-[#F3F9F4] hover:border-[#1B4332]",
             )}
           >
             <input
@@ -211,7 +212,7 @@ export function ImageUploadCard({
         </div>
 
         {/* Kolom Kanan: Pertanyaan Gejala */}
-        <div className="flex flex-col justify-between md:col-span-7 md:border-l md:border-[#E4E4DF] md:pl-8">
+        <div className="flex flex-col justify-between md:col-span-7 md:border-l md:border-[#C6DEC9] md:pl-8">
           <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
             <span className="text-sm font-semibold text-[#111814]">
               Pertanyaan Gejala
@@ -240,7 +241,7 @@ export function ImageUploadCard({
             )}
 
             {!isBusy && !expertState && !combinedError && (
-              <div className="flex min-h-[190px] flex-col items-center justify-center rounded-lg bg-[#F8F7F4] p-6 text-center text-sm text-zinc-500">
+              <div className="flex min-h-[190px] flex-col items-center justify-center rounded-lg bg-[#F3F9F4] p-6 text-center text-sm text-[#385946]">
                 <ImagePlus
                   className="mb-2.5 h-5 w-5 text-zinc-400"
                   strokeWidth={1.75}
@@ -258,7 +259,7 @@ export function ImageUploadCard({
 
                 <div className="space-y-2">
                   <h2 className="text-xl font-semibold leading-snug text-[#111814] md:text-2xl">
-                    {expertState.next_fact_text}?
+                    {formatSymptomQuestion(expertState.next_fact_text)}
                   </h2>
                   <p className="text-sm leading-relaxed text-zinc-500">
                     {SYMPTOM_HINTS[factId] ??
