@@ -11,6 +11,8 @@ from PIL import Image
 from api.schemas import (
     EvaluateRequest,
     EvaluateResponse,
+    HistoryEntrySchema,
+    HistoryResponse,
     HypothesisResultSchema,
     PredictResponse,
 )
@@ -22,6 +24,7 @@ from core.knowledge_store import (
     KB_PATH,
     DiagnosisLogEntry,
     append_diagnosis_log,
+    load_diagnosis_history,
     load_knowledge_base,
 )
 
@@ -113,4 +116,26 @@ def evaluate_expert(req: EvaluateRequest) -> EvaluateResponse:
         current_md=state.current_md,
         current_cf=state.current_cf,
     )
+
+
+def build_history_response() -> HistoryResponse:
+    """Menyusun ringkasan KPI dan daftar riwayat diagnosis dari JSON."""
+    entries = load_diagnosis_history(HISTORY_PATH)
+    total = len(entries)
+    sesuai_count = sum(1 for item in entries if item.status_match == "SESUAI")
+    mismatch_count = sum(1 for item in entries if item.status_match == "TIDAK SESUAI")
+    sesuai_pct = round((sesuai_count / total * 100.0) if total else 0.0, 1)
+    return HistoryResponse(
+        total=total,
+        sesuai_count=sesuai_count,
+        mismatch_count=mismatch_count,
+        sesuai_pct=sesuai_pct,
+        entries=[HistoryEntrySchema(**item.__dict__) for item in entries],
+    )
+
+
+@router.get("/history", response_model=HistoryResponse)
+def get_user_history() -> HistoryResponse:
+    """Mengembalikan riwayat diagnosis untuk halaman Riwayat User."""
+    return build_history_response()
 

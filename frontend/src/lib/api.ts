@@ -38,6 +38,25 @@ export interface EvaluateResponse {
   current_cf: number
 }
 
+export interface HistoryEntry {
+  timestamp: string
+  image_name: string
+  cnn_label: string
+  cnn_confidence: number
+  expert_label: string
+  expert_cf: number
+  status_match: string
+  final_decision: string
+}
+
+export interface HistoryResponse {
+  total: number
+  sesuai_count: number
+  mismatch_count: number
+  sesuai_pct: number
+  entries: HistoryEntry[]
+}
+
 const API_BASE_URL =
   import.meta.env.VITE_API_URL?.replace(/\/$/, '') ?? 'http://localhost:8000'
 
@@ -83,4 +102,20 @@ export async function evaluateExpertSession(
   }
 
   return (await response.json()) as EvaluateResponse
+}
+
+/** Mengambil daftar riwayat diagnosis dari endpoint FastAPI `/api/history`. */
+export async function fetchDiagnosisHistory(): Promise<HistoryResponse> {
+  const response = await fetch(`${API_BASE_URL}/api/history`)
+
+  if (!response.ok) {
+    const errBody = await response.json().catch(() => ({}))
+    const detail =
+      typeof errBody?.detail === 'string'
+        ? errBody.detail
+        : `Server mengembalikan status ${response.status}`
+    throw new Error(detail)
+  }
+
+  return (await response.json()) as HistoryResponse
 }

@@ -6,6 +6,7 @@ export function TopNav() {
   const pathname = useRouterState({ select: (s) => s.location.pathname })
   const isDiagnosisFlow = pathname === '/' || pathname === '/diagnosis'
   const isResult = pathname === '/hasil'
+  const isHistory = pathname === '/riwayat'
 
   return (
     <header className="sticky top-0 z-30 border-b border-[#E4E4DF] bg-white">
@@ -59,6 +60,17 @@ export function TopNav() {
             )}
           >
             Hasil Terakhir
+          </Link>
+          <Link
+            to="/riwayat"
+            className={cn(
+              'py-5 transition-colors',
+              isHistory
+                ? 'border-b-2 border-[#1B4332] font-semibold text-[#111814]'
+                : 'text-zinc-500 hover:text-[#111814]',
+            )}
+          >
+            Riwayat
           </Link>
         </nav>
 
