@@ -101,10 +101,22 @@ class TestFastApiBackend(unittest.TestCase):
         unauth = self.client.get("/api/admin/kb")
         self.assertEqual(unauth.status_code, 401)
 
-        bad_login = self.client.post("/api/auth/login", json={"password": "salah"})
+        bad_user = self.client.post(
+            "/api/auth/login",
+            json={"username": "bukan_admin", "password": "admin123"},
+        )
+        self.assertEqual(bad_user.status_code, 401)
+
+        bad_login = self.client.post(
+            "/api/auth/login",
+            json={"username": "admin", "password": "salah"},
+        )
         self.assertEqual(bad_login.status_code, 401)
 
-        login = self.client.post("/api/auth/login", json={"password": "admin123"})
+        login = self.client.post(
+            "/api/auth/login",
+            json={"username": "admin", "password": "admin123"},
+        )
         self.assertEqual(login.status_code, 200)
         token = login.json()["access_token"]
         headers = {"Authorization": f"Bearer {token}"}

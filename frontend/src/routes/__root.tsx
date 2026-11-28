@@ -9,9 +9,21 @@ export const Route = createRootRoute({
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'MaizeCare AI — Diagnosis Daun Jagung' },
+      { title: 'MaizeCare — Diagnosis Daun Jagung' },
     ],
-    links: [{ rel: 'stylesheet', href: appCss }],
+    links: [
+      { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+      {
+        rel: 'preconnect',
+        href: 'https://fonts.gstatic.com',
+        crossOrigin: 'anonymous',
+      },
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap',
+      },
+      { rel: 'stylesheet', href: appCss },
+    ],
   }),
   shellComponent: RootDocument,
 })
@@ -22,7 +34,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className="min-h-screen bg-[#F8F7F4] text-[#111814] antialiased">
+      <body className="min-h-screen bg-[#EAF3EC] text-[#0F2419] antialiased">
         <main className="px-4 py-10 md:px-8">{children}</main>
         <TanStackDevtools
           config={{ position: 'bottom-right' }}

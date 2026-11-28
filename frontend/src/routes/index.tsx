@@ -1,17 +1,7 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { UserDashboard } from '@/components/dashboard/UserDashboard'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({
-  component: DashboardPage,
+  beforeLoad: () => {
+    throw redirect({ to: '/pemeriksaan' })
+  },
 })
-
-function DashboardPage() {
-  const navigate = useNavigate()
-
-  return (
-    <UserDashboard
-      onStartExam={() => void navigate({ to: '/pemeriksaan' })}
-      onOpenHistory={() => void navigate({ to: '/riwayat' })}
-    />
-  )
-}

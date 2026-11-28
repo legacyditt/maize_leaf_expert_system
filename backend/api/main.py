@@ -3,7 +3,7 @@
 from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.auth import create_access_token, verify_admin_password
+from api.auth import create_access_token, verify_admin_credentials
 from api.routes_admin import router as admin_router
 from api.routes_diagnosis import router as diagnosis_router
 from api.schemas import LoginRequest, LoginResponse
@@ -36,10 +36,10 @@ def create_app() -> FastAPI:
 
     @app.post("/api/auth/login", response_model=LoginResponse, tags=["auth"])
     def admin_login(payload: LoginRequest) -> LoginResponse:
-        if not verify_admin_password(payload.password):
+        if not verify_admin_credentials(payload.username, payload.password):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Password Admin salah",
+                detail="Username atau password Admin salah",
             )
         return LoginResponse(access_token=create_access_token(role="admin"))
 
