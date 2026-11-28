@@ -10,7 +10,7 @@ interface AdminDashboardViewProps {
 }
 
 /**
- * Menu Dashboard Admin: 3 KPI ringkas dan 5 pemeriksaan terbaru.
+ * Menu Dashboard Admin: 3 KPI ringkas dengan informasi pendukung dan 5 pemeriksaan terbaru.
  */
 export function AdminDashboardView({
   kb,
@@ -18,40 +18,67 @@ export function AdminDashboardView({
   onNavigateTab,
 }: AdminDashboardViewProps) {
   const total = history?.total ?? 0
-  const sesuaiPct = history?.sesuai_pct ?? 0
+  const ruleNames = Object.keys(kb.mb_md)
+  const ruleCount = ruleNames.length
   const symptomCount = Object.keys(kb.facts).length
+  const totalRulePairs = Object.values(kb.mb_md).reduce(
+    (sum, weights) => sum + Object.keys(weights).length,
+    0,
+  )
   const recent = history?.entries.slice(0, 5) ?? []
+  const latestTimestamp = recent[0]?.timestamp
 
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-3">
-        <div className="rounded-xl border border-[#E4E4DF] bg-white p-5">
+        <button
+          type="button"
+          onClick={() => onNavigateTab('history')}
+          className="cursor-pointer rounded-xl border border-[#C6DEC9] bg-white p-5 text-left transition-colors hover:border-[#1B4332]/50"
+        >
           <p className="text-xs text-zinc-500">Total Pemeriksaan</p>
           <p className="mt-2 font-mono text-2xl font-bold text-[#111814]">
             {total}
           </p>
-        </div>
-
-        <div className="rounded-xl border border-[#E4E4DF] bg-white p-5">
-          <p className="text-xs text-zinc-500">Kesesuaian CNN &amp; Gejala</p>
-          <p className="mt-2 font-mono text-2xl font-bold text-[#1B4332]">
-            {sesuaiPct.toFixed(1)}%
+          <p className="mt-1.5 text-xs text-zinc-500">
+            {latestTimestamp
+              ? `Terakhir: ${formatIndonesianDate(latestTimestamp)}`
+              : 'Belum ada pemeriksaan tercatat'}
           </p>
-        </div>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => onNavigateTab('rules')}
+          className="cursor-pointer rounded-xl border border-[#C6DEC9] bg-white p-5 text-left transition-colors hover:border-[#1B4332]/50"
+        >
+          <p className="text-xs text-zinc-500">Aturan Penyakit</p>
+          <p className="mt-2 font-mono text-2xl font-bold text-[#1B4332]">
+            {ruleCount}
+          </p>
+          <p className="mt-1.5 text-xs text-zinc-500">
+            {ruleNames.length > 0
+              ? ruleNames.join(' · ')
+              : 'Belum ada aturan aktif'}
+          </p>
+        </button>
 
         <button
           type="button"
           onClick={() => onNavigateTab('symptoms')}
-          className="cursor-pointer rounded-xl border border-[#E4E4DF] bg-white p-5 text-left transition-colors hover:border-[#1B4332]/40"
+          className="cursor-pointer rounded-xl border border-[#C6DEC9] bg-white p-5 text-left transition-colors hover:border-[#1B4332]/50"
         >
           <p className="text-xs text-zinc-500">Variabel Gejala</p>
           <p className="mt-2 font-mono text-2xl font-bold text-[#111814]">
             {symptomCount}
           </p>
+          <p className="mt-1.5 text-xs text-zinc-500">
+            {totalRulePairs} pasangan bobot MB/MD aktif
+          </p>
         </button>
       </div>
 
-      <div className="rounded-xl border border-[#E4E4DF] bg-white p-6">
+      <div className="rounded-xl border border-[#C6DEC9] bg-white p-6">
         <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
           <h2 className="text-sm font-semibold text-[#111814]">
             Pemeriksaan Terbaru

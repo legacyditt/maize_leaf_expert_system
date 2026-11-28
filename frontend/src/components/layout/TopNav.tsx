@@ -10,8 +10,8 @@ export function TopNav() {
           className="flex items-center gap-2.5 text-[#111814] no-underline"
         >
           <svg
-            width="24"
-            height="28"
+            width="32"
+            height="36"
             viewBox="0 0 28 32"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"

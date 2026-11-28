@@ -91,10 +91,10 @@ export function ImageUploadCard({
       <header className="flex flex-col gap-5 border-b border-[#C6DEC9] pb-6 sm:flex-row sm:items-end sm:justify-between">
         <div className="space-y-3">
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-[#B7D7BD] bg-[#DCEFE0]">
+            <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-[#B7D7BD] bg-[#DCEFE0]">
               <svg
-                width="22"
-                height="26"
+                width="32"
+                height="36"
                 viewBox="0 0 28 32"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"

@@ -43,10 +43,10 @@ export function AdminLoginCard({
     <div className="mx-auto flex min-h-[75vh] max-w-md flex-col justify-center">
       <div className="rounded-xl border border-[#C6DEC9] bg-white p-6 md:p-8">
         <div className="mb-6 flex items-center gap-3 border-b border-zinc-100 pb-5">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-[#B7D7BD] bg-[#DCEFE0]">
+          <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-[#B7D7BD] bg-[#DCEFE0]">
             <svg
-              width="20"
-              height="24"
+              width="32"
+              height="36"
               viewBox="0 0 28 32"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"

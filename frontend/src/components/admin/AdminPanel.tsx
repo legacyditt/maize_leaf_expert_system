@@ -103,10 +103,10 @@ export function AdminPanel({
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-6 px-4 md:px-8">
           {/* Kiri: Brand */}
           <div className="flex shrink-0 items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#E4E4DF] bg-[#F8F7F4]">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-[#E4E4DF] bg-[#F8F7F4]">
               <svg
-                width="18"
-                height="20"
+                width="28"
+                height="32"
                 viewBox="0 0 28 32"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
