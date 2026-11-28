@@ -86,7 +86,9 @@ export function ResultDetailCard({
         <div className="space-y-2">
           <p className="text-xs font-medium text-zinc-500">
             Langkah 3 dari 3
-            {result.status_match ? ` · Validasi CNN: ${result.status_match}` : ''}
+            {result.status_match
+              ? ` · Analisis Foto & Gejala: ${result.status_match === 'SESUAI' ? 'Sesuai' : 'Tidak Sesuai'}`
+              : ''}
           </p>
           <h1 className="text-2xl font-bold tracking-tight text-[#111814] md:text-3xl">
             {guide.title}
@@ -97,28 +99,24 @@ export function ResultDetailCard({
         </div>
 
         <div className="shrink-0 border-t border-[#E4E4DF] pt-4 md:border-l md:border-t-0 md:pl-8 md:pt-0">
-          <p className="text-xs text-zinc-500">Certainty Factor</p>
+          <p className="text-xs text-zinc-500">Tingkat Keyakinan</p>
           <p className="font-mono text-3xl font-bold tracking-tight text-[#1B4332]">
             {cfPercent.toFixed(1)}%
-          </p>
-          <p className="font-mono text-xs text-zinc-400">
-            CF {cfValue >= 0 ? '+' : ''}
-            {cfValue.toFixed(3)}
           </p>
         </div>
       </div>
 
-      {/* Komparasi CNN vs Pakar & Rekomendasi Lapangan */}
+      {/* Komparasi Analisis Foto vs Gejala & Rekomendasi Lapangan */}
       <div className="grid gap-6 md:grid-cols-12">
         <div className="space-y-4 rounded-xl border border-[#E4E4DF] bg-white p-6 md:col-span-5">
-          <h2 className="text-sm font-semibold text-zinc-950">
-            Validasi Silang CNN &amp; Pakar
+          <h2 className="text-sm font-semibold text-[#111814]">
+            Ringkasan Pemeriksaan
           </h2>
 
           {cnnCtx.useCnn && cnnCtx.prediction ? (
             <div className="space-y-3 border-t border-zinc-100 pt-3">
               <div className="flex items-baseline justify-between text-xs">
-                <span className="text-zinc-500">Prediksi CNN</span>
+                <span className="text-zinc-500">Analisis Foto</span>
                 <span className="font-mono font-semibold text-zinc-900">
                   {cnnCtx.prediction.label} (
                   {(cnnCtx.prediction.confidence * 100).toFixed(1)}%)
@@ -151,7 +149,7 @@ export function ResultDetailCard({
           )}
 
           <div className="flex items-baseline justify-between border-t border-zinc-100 pt-3 text-xs">
-            <span className="text-zinc-500">Sistem Pakar</span>
+            <span className="text-zinc-500">Hasil Gejala</span>
             <span className="font-semibold text-[#111814]">
               {result.best?.goal ?? 'Tidak Terbukti'}
             </span>

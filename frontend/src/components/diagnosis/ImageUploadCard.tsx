@@ -65,8 +65,8 @@ export function ImageUploadCard({
           Unggah Foto Daun Jagung
         </h1>
         <p className="max-w-xl text-sm text-zinc-500">
-          Model CNN (256×256) mendeteksi indikasi Hawar, Karat, atau Sehat sebelum
-          divalidasi sistem pakar.
+          Sistem akan memeriksa indikasi Hawar, Karat, atau kondisi Sehat dari
+          foto daun sebelum konfirmasi gejala.
         </p>
       </div>
 
@@ -125,19 +125,16 @@ export function ImageUploadCard({
         {/* Kolom Kanan: Output CNN */}
         <div className="flex flex-col justify-between space-y-6">
           <div className="space-y-4">
-            <div className="flex items-baseline justify-between border-b border-zinc-100 pb-2.5">
-              <span className="text-sm font-semibold text-zinc-900">
-                Klasifikasi Visual CNN
-              </span>
-              <span className="font-mono text-xs text-zinc-400">
-                maize_leaf_model.keras
+            <div className="border-b border-zinc-100 pb-2.5">
+              <span className="text-sm font-semibold text-[#111814]">
+                Hasil Analisis Foto
               </span>
             </div>
 
             {loading && (
               <div className="flex items-center gap-2.5 py-6 text-sm text-zinc-600">
-                <Loader2 className="h-4 w-4 animate-spin text-[#166534]" />
-                Menjalankan inferensi model...
+                <Loader2 className="h-4 w-4 animate-spin text-[#1B4332]" />
+                Menganalisis foto daun...
               </div>
             )}
 
@@ -158,8 +155,8 @@ export function ImageUploadCard({
               <div className="space-y-4">
                 <div className="flex items-baseline justify-between">
                   <div>
-                    <p className="text-xs text-zinc-500">Kelas Terdeteksi</p>
-                    <p className="text-2xl font-bold tracking-tight text-zinc-950">
+                    <p className="text-xs text-zinc-500">Penyakit Terdeteksi</p>
+                    <p className="text-2xl font-bold tracking-tight text-[#111814]">
                       {prediction.label}
                     </p>
                   </div>

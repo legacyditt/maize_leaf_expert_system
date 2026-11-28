@@ -43,17 +43,16 @@ export function SymptomWizard({
           <p className="text-xs font-medium text-zinc-500">
             Langkah 2 dari 3 •{' '}
             {cnnCtx.useCnn && cnnCtx.prediction
-              ? `Target CNN: ${cnnCtx.prediction.label} (${(cnnCtx.prediction.confidence * 100).toFixed(1)}%)`
-              : 'Penelusuran Penuh'}
+              ? `Dugaan Awal Foto: ${cnnCtx.prediction.label} (${(cnnCtx.prediction.confidence * 100).toFixed(1)}%)`
+              : 'Pemeriksaan Menyeluruh'}
           </p>
-          <h1 className="mt-1 text-2xl font-bold tracking-tight text-zinc-950">
-            Validasi Gejala Daun
+          <h1 className="mt-1 text-2xl font-bold tracking-tight text-[#111814]">
+            Pemeriksaan Gejala Daun
           </h1>
         </div>
         {state && (
           <span className="font-mono text-xs text-zinc-500">
-            CF {state.current_cf >= 0 ? '+' : ''}
-            {state.current_cf.toFixed(3)}
+            Keyakinan {Math.max(0, state.current_cf * 100).toFixed(0)}%
           </span>
         )}
       </div>
@@ -73,8 +72,8 @@ export function SymptomWizard({
         ) : (
           <div className="space-y-6">
             <div className="flex items-center justify-between text-xs text-zinc-500">
-              <span className="font-mono font-medium text-[#1B4332]">
-                {factId} / {goal}
+              <span className="font-medium text-[#1B4332]">
+                Pemeriksaan Gejala · {goal}
               </span>
               {state?.step_index && state?.total_steps && (
                 <span>
@@ -117,16 +116,11 @@ export function SymptomWizard({
         )}
       </div>
 
-      <div className="flex items-center justify-between text-xs text-zinc-500">
+      <div className="flex items-center text-xs text-zinc-500">
         <Button variant="ghost" size="sm" onClick={onBackToUpload}>
           <ArrowLeft className="h-4 w-4" />
           Kembali
         </Button>
-        {state && (
-          <span className="font-mono">
-            MB {state.current_mb.toFixed(3)} · MD {state.current_md.toFixed(3)}
-          </span>
-        )}
       </div>
     </div>
   )

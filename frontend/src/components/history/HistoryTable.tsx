@@ -39,7 +39,7 @@ export function HistoryTable({ data }: HistoryTableProps) {
             Riwayat Diagnosis
           </h1>
           <p className="mt-1 text-sm text-zinc-500">
-            Catatan hasil klasifikasi CNN dan validasi Sistem Pakar Certainty Factor.
+            Catatan hasil analisis foto daun dan pemeriksaan gejala.
           </p>
         </div>
 
@@ -49,7 +49,7 @@ export function HistoryTable({ data }: HistoryTableProps) {
             <p className="text-lg font-bold text-[#111814]">{data.total}</p>
           </div>
           <div className="border-l border-[#E4E4DF] pl-6">
-            <p className="font-sans text-zinc-500">Sesuai CNN</p>
+            <p className="font-sans text-zinc-500">Hasil Sesuai</p>
             <p className="text-lg font-bold text-[#1B4332]">{data.sesuai_pct}%</p>
           </div>
           <div className="border-l border-[#E4E4DF] pl-6">
@@ -106,9 +106,9 @@ export function HistoryTable({ data }: HistoryTableProps) {
                 <tr>
                   <th className="px-4 py-3 font-medium">Waktu</th>
                   <th className="px-4 py-3 font-medium">Foto</th>
-                  <th className="px-4 py-3 font-medium">Prediksi CNN</th>
-                  <th className="px-4 py-3 font-medium">Sistem Pakar</th>
-                  <th className="px-4 py-3 font-medium">CF</th>
+                  <th className="px-4 py-3 font-medium">Analisis Foto</th>
+                  <th className="px-4 py-3 font-medium">Hasil Gejala</th>
+                  <th className="px-4 py-3 font-medium">Keyakinan</th>
                   <th className="px-4 py-3 font-medium">Status</th>
                 </tr>
               </thead>
@@ -141,8 +141,7 @@ export function HistoryTable({ data }: HistoryTableProps) {
                         {entry.expert_label}
                       </td>
                       <td className="px-4 py-3 font-mono text-xs font-semibold text-[#1B4332]">
-                        {entry.expert_cf >= 0 ? '+' : ''}
-                        {entry.expert_cf.toFixed(2)}
+                        {Math.max(0, entry.expert_cf * 100).toFixed(0)}%
                       </td>
                       <td className="px-4 py-3 text-xs">
                         <span
