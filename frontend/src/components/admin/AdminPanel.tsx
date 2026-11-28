@@ -155,15 +155,9 @@ export function AdminPanel({
             })}
           </nav>
 
-          {/* Kanan: Avatar AD + Keluar */}
-          <div className="flex shrink-0 items-center gap-3">
-            <div
-              title="admin"
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-[#E4E4DF] bg-[#F8F7F4] text-xs font-semibold text-[#111814]"
-            >
-              AD
-            </div>
-            <Button variant="ghost" size="sm" onClick={onLogout}>
+          {/* Kanan: Keluar */}
+          <div className="flex shrink-0 items-center">
+            <Button variant="outline" size="sm" onClick={onLogout}>
               <LogOut className="h-3.5 w-3.5" />
               <span className="hidden sm:inline">Keluar</span>
             </Button>
