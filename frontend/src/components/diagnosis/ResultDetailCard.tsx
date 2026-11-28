@@ -84,7 +84,7 @@ export function ResultDetailCard({
       )}
 
       {/* Header Verdict */}
-      <div className="flex flex-col justify-between gap-6 rounded-xl border border-[#E4E4DF] bg-white p-6 md:flex-row md:items-center md:p-8">
+      <div className="flex flex-col justify-between gap-6 rounded-xl border border-[#C6DEC9] bg-white p-6 md:flex-row md:items-center md:p-8">
         <div className="flex items-start gap-4">
           {thumbUrl && (
             <img
@@ -118,7 +118,7 @@ export function ResultDetailCard({
       </div>
 
       {/* Ringkasan Pemeriksaan: Komparasi Foto & Gejala dalam 1 Kartu Seimbang */}
-      <div className="rounded-xl border border-[#E4E4DF] bg-white p-6 md:p-8">
+      <div className="rounded-xl border border-[#C6DEC9] bg-white p-6 md:p-8">
         <h2 className="border-b border-zinc-100 pb-3 text-sm font-semibold text-[#111814]">
           Ringkasan Pemeriksaan
         </h2>

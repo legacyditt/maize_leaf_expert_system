@@ -18,13 +18,13 @@ KB_PATH: Path = DATA_DIR / "knowledge_base.json"
 HISTORY_PATH: Path = DATA_DIR / "diagnosis_history.json"
 
 DEFAULT_FACTS: dict[str, str] = {
-    "G1": "Terdapat bintik atau benjolan kecil berisi serbuk cokelat kekuningan pada daun",
-    "G2": "Daun tampak menguning atau mulai mengering di sekitar bercak",
-    "G3": "Bintik serbuk cokelat muncul di permukaan atas maupun bawah daun",
-    "G4": "Terdapat bercak memanjang seperti cerutu berwarna hijau keabu-abuan hingga cokelat muda",
-    "G5": "Terdapat bercak awal berukuran kecil dengan bagian tepi tampak basah",
-    "G6": "Permukaan daun berwarna hijau merata dan bersih tanpa bercak atau bintik",
-    "G7": "Kondisi daun tampak segar, tidak menguning, dan tidak ada serbuk karat maupun bercak memanjang",
+    "G1": "Terdapat bintik-bintik kecil atau benjolan berisi serbuk cokelat kemerahan pada daun",
+    "G2": "Bagian daun di sekitar bintik mulai menguning atau mengering",
+    "G3": "Bintik serbuk cokelat tersebut muncul di sisi atas maupun balik daun",
+    "G4": "Terdapat bercak lebar yang memanjang mengikuti arah daun, berwarna abu-abu kehijauan hingga cokelat",
+    "G5": "Terdapat bercak kecil pada daun yang pinggirannya tampak basah atau pucat",
+    "G6": "Permukaan daun berwarna hijau merata dan bersih tanpa bintik atau bercak",
+    "G7": "Seluruh daun tampak segar, tidak menguning, dan tidak mengering",
 }
 
 DEFAULT_MB_MD: dict[str, dict[str, tuple[float, float]]] = {
