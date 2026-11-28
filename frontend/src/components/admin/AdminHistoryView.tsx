@@ -1,7 +1,10 @@
+import { useState } from 'react'
 import { Download, Trash2 } from 'lucide-react'
+import { ResultDetailCard } from '@/components/diagnosis/ResultDetailCard'
 import { Button } from '@/components/ui/button'
-import type { HistoryResponse } from '@/lib/api'
+import type { HistoryEntry, HistoryResponse } from '@/lib/api'
 import { formatIndonesianDate } from '@/lib/format-date'
+import { historyEntryToViewModels } from '@/lib/history-mapper'
 
 interface AdminHistoryViewProps {
   history: HistoryResponse | null
@@ -11,7 +14,7 @@ interface AdminHistoryViewProps {
 }
 
 /**
- * Menu Riwayat Diagnosis Admin: Tabel lengkap, ekspor CSV, dan hapus riwayat.
+ * Menu Riwayat Diagnosis Admin: Tabel lengkap (klik baris untuk lihat hasil), ekspor CSV, dan hapus riwayat.
  */
 export function AdminHistoryView({
   history,
@@ -19,10 +22,24 @@ export function AdminHistoryView({
   onDownloadCsv,
   onClearHistory,
 }: AdminHistoryViewProps) {
+  const [selected, setSelected] = useState<HistoryEntry | null>(null)
   const entries = history?.entries ?? []
 
+  if (selected) {
+    const { result, cnnCtx } = historyEntryToViewModels(selected)
+    return (
+      <ResultDetailCard
+        result={result}
+        cnnCtx={cnnCtx}
+        onBack={() => setSelected(null)}
+        backLabel="Kembali ke Riwayat"
+        headerSubtitle={formatIndonesianDate(selected.timestamp)}
+      />
+    )
+  }
+
   return (
-    <div className="space-y-4 rounded-xl border border-[#E4E4DF] bg-white p-6">
+    <div className="space-y-4 rounded-xl border border-[#C6DEC9] bg-white p-6">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 pb-4">
         <div>
           <h2 className="text-sm font-semibold text-[#111814]">
@@ -31,7 +48,7 @@ export function AdminHistoryView({
           <p className="text-xs text-zinc-500">
             Total {history?.total ?? 0} catatan · Sesuai:{' '}
             {history?.sesuai_count ?? 0} · Tidak Sesuai:{' '}
-            {history?.mismatch_count ?? 0}
+            {history?.mismatch_count ?? 0} · Klik baris untuk lihat detail
           </p>
         </div>
 
@@ -81,7 +98,11 @@ export function AdminHistoryView({
             </thead>
             <tbody className="divide-y divide-zinc-100">
               {entries.map((row, idx) => (
-                <tr key={`${row.timestamp}-${idx}`}>
+                <tr
+                  key={`${row.timestamp}-${idx}`}
+                  onClick={() => setSelected(row)}
+                  className="cursor-pointer transition-colors hover:bg-[#F3F9F4]"
+                >
                   <td className="whitespace-nowrap py-2.5 pr-4 text-zinc-600">
                     {formatIndonesianDate(row.timestamp)}
                   </td>
@@ -117,4 +138,3 @@ export function AdminHistoryView({
     </div>
   )
 }
-

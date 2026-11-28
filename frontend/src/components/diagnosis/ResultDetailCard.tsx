@@ -31,7 +31,7 @@ interface ResultDetailCardProps {
   result: EvaluateResponse
   cnnCtx: CnnContext
   onRetrySymptoms?: () => void
-  onNewDiagnosis: () => void
+  onNewDiagnosis?: () => void
   onBack?: () => void
   backLabel?: string
   headerSubtitle?: string
@@ -193,15 +193,19 @@ export function ResultDetailCard({
       </div>
 
       {/* Tombol Aksi */}
-      <div className="flex flex-wrap items-center justify-end gap-3">
-        {onRetrySymptoms && (
-          <Button variant="outline" onClick={onRetrySymptoms}>
-            <RotateCcw className="h-4 w-4" />
-            Jawab Ulang Gejala
-          </Button>
-        )}
-        <Button onClick={onNewDiagnosis}>Periksa Daun Lain</Button>
-      </div>
+      {(onRetrySymptoms || onNewDiagnosis) && (
+        <div className="flex flex-wrap items-center justify-end gap-3">
+          {onRetrySymptoms && (
+            <Button variant="outline" onClick={onRetrySymptoms}>
+              <RotateCcw className="h-4 w-4" />
+              Jawab Ulang Gejala
+            </Button>
+          )}
+          {onNewDiagnosis && (
+            <Button onClick={onNewDiagnosis}>Periksa Daun Lain</Button>
+          )}
+        </div>
+      )}
     </div>
   )
 }
