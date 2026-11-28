@@ -47,6 +47,7 @@ function PemeriksaanPage() {
         known: nextKnown,
         cnn_label: cnnLabel,
         cnn_confidence: ctx.prediction?.confidence ?? 0,
+        cnn_probabilities: ctx.prediction?.probabilities ?? null,
         image_name: ctx.fileName,
         image_url: ctx.prediction?.image_url ?? null,
         log_history: true,

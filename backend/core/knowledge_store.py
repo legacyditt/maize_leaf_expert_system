@@ -9,6 +9,7 @@ import csv
 import io
 import json
 from pathlib import Path
+from typing import Any
 
 from core.config import BASE_DIR, CF_ACCEPT, CF_DUGAAN
 
@@ -74,6 +75,8 @@ class DiagnosisLogEntry:
     status_match: str
     final_decision: str
     image_url: str | None = None
+    cnn_probabilities: dict[str, float] | None = None
+    results: list[dict[str, Any]] | None = None
 
 
 def default_knowledge_base() -> KnowledgeBase:

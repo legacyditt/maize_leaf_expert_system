@@ -18,6 +18,7 @@ export interface EvaluateRequest {
   known: Record<string, 'ya' | 'tidak'>
   cnn_label: string | null
   cnn_confidence?: number
+  cnn_probabilities?: Record<string, number> | null
   image_name?: string | null
   image_url?: string | null
   log_history?: boolean
@@ -50,6 +51,8 @@ export interface HistoryEntry {
   status_match: string
   final_decision: string
   image_url?: string | null
+  cnn_probabilities?: Record<string, number> | null
+  results?: HypothesisResult[] | null
 }
 
 export interface HistoryResponse {

@@ -1,7 +1,7 @@
-import { RotateCcw } from 'lucide-react'
+import { ArrowLeft, RotateCcw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
-import type { EvaluateResponse } from '@/lib/api'
+import { getApiAssetUrl, type EvaluateResponse } from '@/lib/api'
 import type { CnnContext } from '@/lib/diagnosis-storage'
 
 interface DiseaseGuide {
@@ -46,18 +46,24 @@ const DISEASE_GUIDES: Record<string, DiseaseGuide> = {
 interface ResultDetailCardProps {
   result: EvaluateResponse
   cnnCtx: CnnContext
-  onRetrySymptoms: () => void
+  onRetrySymptoms?: () => void
   onNewDiagnosis: () => void
+  onBack?: () => void
+  backLabel?: string
+  headerSubtitle?: string
 }
 
 /**
- * Halaman 3 User: Ringkasan diagnosis bersih tanpa gradasi atau badge berlebihan.
+ * Halaman 3 User & Detail Riwayat: Ringkasan diagnosis Forest & Bone.
  */
 export function ResultDetailCard({
   result,
   cnnCtx,
   onRetrySymptoms,
   onNewDiagnosis,
+  onBack,
+  backLabel = 'Kembali',
+  headerSubtitle,
 }: ResultDetailCardProps) {
   const cfValue = result.best?.cf ?? 0
   const cfPercent = Math.max(0, Math.min(100, cfValue * 100))
@@ -71,7 +77,7 @@ export function ResultDetailCard({
       : {
           title: 'Kondisi Belum Dapat Dipastikan',
           summary:
-            'Gejala fisik yang dipilih belum cukup kuat atau berbeda dengan prediksi visual CNN.',
+            'Gejala fisik yang dipilih belum cukup kuat atau berbeda dengan prediksi visual.',
           actions: [
             'Ambil ulang foto daun dengan pencahayaan merata dan fokus pada bercak.',
             'Ulangi pemeriksaan kedua sisi daun (atas dan bawah).',
@@ -79,23 +85,43 @@ export function ResultDetailCard({
           ],
         }
 
+  const thumbUrl = getApiAssetUrl(cnnCtx.prediction?.image_url)
+
   return (
     <div className="mx-auto max-w-4xl space-y-6">
+      {onBack && (
+        <div>
+          <Button variant="ghost" size="sm" onClick={onBack}>
+            <ArrowLeft className="h-4 w-4" />
+            {backLabel}
+          </Button>
+        </div>
+      )}
+
       {/* Header Verdict Solid & Bersih */}
       <div className="flex flex-col justify-between gap-6 rounded-xl border border-[#E4E4DF] bg-white p-6 md:flex-row md:items-center md:p-8">
-        <div className="space-y-2">
-          <p className="text-xs font-medium text-zinc-500">
-            Langkah 3 dari 3
-            {result.status_match
-              ? ` · Analisis Foto & Gejala: ${result.status_match === 'SESUAI' ? 'Sesuai' : 'Tidak Sesuai'}`
-              : ''}
-          </p>
-          <h1 className="text-2xl font-bold tracking-tight text-[#111814] md:text-3xl">
-            {guide.title}
-          </h1>
-          <p className="max-w-xl text-sm leading-relaxed text-zinc-600">
-            {guide.summary}
-          </p>
+        <div className="flex items-start gap-4">
+          {thumbUrl && (
+            <img
+              src={thumbUrl}
+              alt={cnnCtx.fileName ?? 'Foto daun'}
+              className="hidden h-20 w-20 shrink-0 rounded-lg border border-[#E4E4DF] object-cover sm:block"
+            />
+          )}
+          <div className="space-y-2">
+            <p className="text-xs font-medium text-zinc-500">
+              {headerSubtitle ?? 'Langkah 3 dari 3'}
+              {result.status_match && result.status_match !== 'MODE PAKAR'
+                ? ` · Analisis Foto & Gejala: ${result.status_match === 'SESUAI' ? 'Sesuai' : 'Tidak Sesuai'}`
+                : ''}
+            </p>
+            <h1 className="text-2xl font-bold tracking-tight text-[#111814] md:text-3xl">
+              {guide.title}
+            </h1>
+            <p className="max-w-xl text-sm leading-relaxed text-zinc-600">
+              {guide.summary}
+            </p>
+          </div>
         </div>
 
         <div className="shrink-0 border-t border-[#E4E4DF] pt-4 md:border-l md:border-t-0 md:pl-8 md:pt-0">
@@ -144,7 +170,7 @@ export function ResultDetailCard({
             </div>
           ) : (
             <p className="border-t border-zinc-100 pt-3 text-xs text-zinc-500">
-              Diagnosis dijalankan tanpa foto CNN.
+              Pemeriksaan dijalankan tanpa foto daun.
             </p>
           )}
 
@@ -178,10 +204,12 @@ export function ResultDetailCard({
 
       {/* Tombol Aksi */}
       <div className="flex flex-wrap items-center justify-end gap-3">
-        <Button variant="outline" onClick={onRetrySymptoms}>
-          <RotateCcw className="h-4 w-4" />
-          Ulangi Gejala
-        </Button>
+        {onRetrySymptoms && (
+          <Button variant="outline" onClick={onRetrySymptoms}>
+            <RotateCcw className="h-4 w-4" />
+            Ulangi Gejala
+          </Button>
+        )}
         <Button onClick={onNewDiagnosis}>Diagnosis Daun Baru</Button>
       </div>
     </div>

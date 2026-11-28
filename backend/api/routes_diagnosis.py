@@ -126,6 +126,8 @@ def evaluate_expert(req: EvaluateRequest) -> EvaluateResponse:
                 status_match=state.status_match or "MODE PAKAR",
                 final_decision=state.final_decision,
                 image_url=req.image_url,
+                cnn_probabilities=req.cnn_probabilities,
+                results=[r.__dict__ for r in state.results],
             ),
             path=HISTORY_PATH,
         )
