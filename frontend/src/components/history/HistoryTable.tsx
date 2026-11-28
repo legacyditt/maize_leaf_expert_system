@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Search } from 'lucide-react'
-import type { HistoryEntry, HistoryResponse } from '@/lib/api'
+import { getApiAssetUrl, type HistoryEntry, type HistoryResponse } from '@/lib/api'
+import { formatIndonesianDate } from '@/lib/format-date'
 import { cn } from '@/lib/utils'
 
 const FILTERS = ['Semua', 'Karat', 'Hawar', 'Sehat', 'Tidak Terbukti'] as const
@@ -126,8 +127,8 @@ export function HistoryTable({ data }: HistoryTableProps) {
                         isActive && 'bg-[#F8F7F4]',
                       )}
                     >
-                      <td className="whitespace-nowrap px-4 py-3 font-mono text-xs text-zinc-500">
-                        {entry.timestamp}
+                      <td className="whitespace-nowrap px-4 py-3 text-xs text-zinc-500">
+                        {formatIndonesianDate(entry.timestamp)}
                       </td>
                       <td className="px-4 py-3 font-medium text-[#111814]">
                         {entry.image_name}
@@ -168,18 +169,27 @@ export function HistoryTable({ data }: HistoryTableProps) {
 
       {/* Ringkasan Baris Terpilih */}
       {selected && (
-        <div className="rounded-xl border border-[#E4E4DF] bg-white p-5 text-sm">
-          <div className="flex flex-wrap items-baseline justify-between gap-2">
-            <p className="font-semibold text-[#111814]">
-              Detail: {selected.image_name}
+        <div className="flex items-center gap-4 rounded-xl border border-[#E4E4DF] bg-white p-5 text-sm">
+          {getApiAssetUrl(selected.image_url) && (
+            <img
+              src={getApiAssetUrl(selected.image_url) ?? ''}
+              alt={selected.image_name}
+              className="h-16 w-16 shrink-0 rounded-lg border border-[#E4E4DF] object-cover"
+            />
+          )}
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-baseline justify-between gap-2">
+              <p className="font-semibold text-[#111814]">
+                Detail: {selected.image_name}
+              </p>
+              <span className="text-xs text-zinc-500">
+                {formatIndonesianDate(selected.timestamp)}
+              </span>
+            </div>
+            <p className="mt-1.5 text-zinc-600">
+              {selected.final_decision || 'Tidak ada keputusan akhir tercatat.'}
             </p>
-            <span className="font-mono text-xs text-zinc-500">
-              {selected.timestamp}
-            </span>
           </div>
-          <p className="mt-2 text-zinc-600">
-            {selected.final_decision || 'Tidak ada keputusan akhir tercatat.'}
-          </p>
         </div>
       )}
     </div>

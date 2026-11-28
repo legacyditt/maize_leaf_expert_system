@@ -73,6 +73,7 @@ class DiagnosisLogEntry:
     expert_cf: float
     status_match: str
     final_decision: str
+    image_url: str | None = None
 
 
 def default_knowledge_base() -> KnowledgeBase:

@@ -1,11 +1,11 @@
 import { Link, useRouterState } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
 
-/** Top navigation bar dengan logo daun jagung MaizeCare. */
+/** Top navigation bar dengan tepat 3 tab: Dashboard, Pemeriksaan, Riwayat. */
 export function TopNav() {
   const pathname = useRouterState({ select: (s) => s.location.pathname })
-  const isDiagnosisFlow = pathname === '/' || pathname === '/diagnosis'
-  const isResult = pathname === '/hasil'
+  const isDashboard = pathname === '/'
+  const isExam = pathname === '/pemeriksaan'
   const isHistory = pathname === '/riwayat'
 
   return (
@@ -38,28 +38,28 @@ export function TopNav() {
           </span>
         </Link>
 
-        <nav className="flex items-center gap-7 text-sm">
+        <nav className="flex items-center gap-8 text-sm">
           <Link
             to="/"
             className={cn(
               'py-5 transition-colors',
-              isDiagnosisFlow
+              isDashboard
                 ? 'border-b-2 border-[#1B4332] font-semibold text-[#111814]'
                 : 'text-zinc-500 hover:text-[#111814]',
             )}
           >
-            Diagnosis
+            Dashboard
           </Link>
           <Link
-            to="/hasil"
+            to="/pemeriksaan"
             className={cn(
               'py-5 transition-colors',
-              isResult
+              isExam
                 ? 'border-b-2 border-[#1B4332] font-semibold text-[#111814]'
                 : 'text-zinc-500 hover:text-[#111814]',
             )}
           >
-            Hasil Terakhir
+            Pemeriksaan
           </Link>
           <Link
             to="/riwayat"
