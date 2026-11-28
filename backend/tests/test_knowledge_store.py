@@ -78,6 +78,28 @@ class TestKnowledgeStore(unittest.TestCase):
             self.assertIn("timestamp,image_name,cnn_label", csv_text)
             self.assertIn("018.jpg,Karat,0.974,Karat,0.990,SESUAI", csv_text)
 
+    def test_build_history_response_counts_matches(self) -> None:
+        """Endpoint helper build_history_response harus menghitung KPI kecocokan."""
+        from unittest.mock import patch
+        from api.routes_diagnosis import build_history_response
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            hist_path = Path(tmpdir) / "history.json"
+            append_diagnosis_log(
+                DiagnosisLogEntry("2026-11-28 01:00:00", "a.jpg", "Karat", 0.9, "Karat", 0.99, "SESUAI", "OK"),
+                hist_path,
+            )
+            append_diagnosis_log(
+                DiagnosisLogEntry("2026-11-28 01:05:00", "b.jpg", "Hawar", 0.8, "Tidak Terbukti", 0.0, "TIDAK SESUAI", "Fail"),
+                hist_path,
+            )
+            with patch("api.routes_diagnosis.HISTORY_PATH", hist_path):
+                res = build_history_response()
+            self.assertEqual(res.total, 2)
+            self.assertEqual(res.sesuai_count, 1)
+            self.assertEqual(res.mismatch_count, 1)
+            self.assertAlmostEqual(res.sesuai_pct, 50.0)
+
 
 if __name__ == "__main__":
     unittest.main()
