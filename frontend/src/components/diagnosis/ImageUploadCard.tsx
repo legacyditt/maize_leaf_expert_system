@@ -118,7 +118,7 @@ export function ImageUploadCard({
                 MaizeCare
               </p>
               <p className="mt-1 text-xs text-zinc-500">
-                Sistem Pakar Daun Jagung
+                Pemeriksaan Kondisi Daun Jagung
               </p>
             </div>
           </div>
@@ -128,8 +128,8 @@ export function ImageUploadCard({
               Pemeriksaan Daun Jagung
             </h1>
             <p className="max-w-xl text-sm text-zinc-500">
-              Unggah foto daun jagung, lalu jawab pertanyaan untuk memastikan
-              kondisi tanaman.
+              Unggah foto daun jagung, lalu jawab beberapa pertanyaan singkat
+              sesuai kondisi daun yang terlihat.
             </p>
           </div>
         </div>
@@ -210,11 +210,11 @@ export function ImageUploadCard({
           )}
         </div>
 
-        {/* Kolom Kanan: Validasi Gejala (Backward Chaining) */}
+        {/* Kolom Kanan: Pertanyaan Gejala */}
         <div className="flex flex-col justify-between md:col-span-7 md:border-l md:border-[#E4E4DF] md:pl-8">
           <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
             <span className="text-sm font-semibold text-[#111814]">
-              Validasi Gejala
+              Pertanyaan Gejala
             </span>
             {expertState?.step_index && expertState?.total_steps && (
               <span className="font-mono text-xs text-zinc-500">
@@ -245,15 +245,15 @@ export function ImageUploadCard({
                   className="mb-2.5 h-5 w-5 text-zinc-400"
                   strokeWidth={1.75}
                 />
-                Pertanyaan validasi gejala akan tampil otomatis setelah foto
-                diunggah.
+                Pertanyaan seputar kondisi daun akan muncul otomatis setelah
+                foto diunggah.
               </div>
             )}
 
             {expertState && (
               <div className="space-y-4">
                 <p className="text-xs font-semibold text-[#1B4332]">
-                  Pemeriksaan Kondisi · {goal}
+                  Memeriksa kemungkinan · {goal}
                 </p>
 
                 <div className="space-y-2">
