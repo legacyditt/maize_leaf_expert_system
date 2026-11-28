@@ -1,5 +1,31 @@
 [
   {
+    "timestamp": "2026-11-28 13:50:10",
+    "image_name": "107.jpg",
+    "cnn_label": "Hawar",
+    "cnn_confidence": 0.9974825978279114,
+    "expert_label": "Hawar",
+    "expert_cf": 0.96,
+    "status_match": "SESUAI",
+    "final_decision": "Terdiagnosis: Hawar (Sangat yakin, CF = 0.96)",
+    "image_url": "/api/uploads/9f8e2a5ba2644bec8b269cfbf73bd920.jpg",
+    "cnn_probabilities": {
+      "Hawar": 0.9974825978279114,
+      "Karat": 0.0025145187973976135,
+      "Sehat": 2.8715430744341575e-06
+    },
+    "results": [
+      {
+        "goal": "Hawar",
+        "mb": 0.96,
+        "md": 0.0,
+        "cf": 0.96,
+        "pruned": false,
+        "proven": true
+      }
+    ]
+  },
+  {
     "timestamp": "2026-11-28 13:03:46",
     "image_name": "107.jpg",
     "cnn_label": "Hawar",
@@ -8,7 +34,9 @@
     "expert_cf": 0.96,
     "status_match": "SESUAI",
     "final_decision": "Terdiagnosis: Hawar (Sangat yakin, CF = 0.96)",
-    "image_url": "/api/uploads/4b57bbae5b584ebea1abba99216f3def.jpg"
+    "image_url": "/api/uploads/4b57bbae5b584ebea1abba99216f3def.jpg",
+    "cnn_probabilities": null,
+    "results": null
   },
   {
     "timestamp": "2026-11-28 12:03:55",
@@ -19,7 +47,9 @@
     "expert_cf": 0.75,
     "status_match": "SESUAI",
     "final_decision": "Terdiagnosis: Sehat (Yakin, CF = 0.75)",
-    "image_url": null
+    "image_url": null,
+    "cnn_probabilities": null,
+    "results": null
   },
   {
     "timestamp": "2026-11-28 12:03:52",
@@ -30,7 +60,9 @@
     "expert_cf": 0.5,
     "status_match": "SESUAI",
     "final_decision": "Dugaan: Sehat (Cukup yakin, CF = 0.50) - disarankan verifikasi ahli / foto ulang",
-    "image_url": null
+    "image_url": null,
+    "cnn_probabilities": null,
+    "results": null
   },
   {
     "timestamp": "2026-11-28 12:03:46",
@@ -41,7 +73,9 @@
     "expert_cf": 0.0,
     "status_match": "TIDAK SESUAI",
     "final_decision": "Sistem tidak dapat menentukan kondisi daun",
-    "image_url": null
+    "image_url": null,
+    "cnn_probabilities": null,
+    "results": null
   },
   {
     "timestamp": "2026-11-28 12:03:34",
@@ -52,7 +86,9 @@
     "expert_cf": 0.0,
     "status_match": "TIDAK SESUAI",
     "final_decision": "Sistem tidak dapat menentukan kondisi daun",
-    "image_url": null
+    "image_url": null,
+    "cnn_probabilities": null,
+    "results": null
   },
   {
     "timestamp": "2026-11-28 03:47:56",
@@ -63,7 +99,9 @@
     "expert_cf": 0.994,
     "status_match": "SESUAI",
     "final_decision": "Terdiagnosis: Karat (Sangat yakin, CF = 0.99)",
-    "image_url": null
+    "image_url": null,
+    "cnn_probabilities": null,
+    "results": null
   },
   {
     "timestamp": "2026-11-28 03:47:10",
@@ -74,7 +112,9 @@
     "expert_cf": 0.0,
     "status_match": "TIDAK SESUAI",
     "final_decision": "Sistem tidak dapat menentukan kondisi daun",
-    "image_url": null
+    "image_url": null,
+    "cnn_probabilities": null,
+    "results": null
   },
   {
     "timestamp": "2026-11-28 03:37:53",
@@ -85,7 +125,9 @@
     "expert_cf": 0.99,
     "status_match": "SESUAI",
     "final_decision": "Terdiagnosis: Karat (Sangat yakin, CF = 0.99)",
-    "image_url": null
+    "image_url": null,
+    "cnn_probabilities": null,
+    "results": null
   },
   {
     "timestamp": "2026-11-28 02:19:52",
@@ -96,7 +138,9 @@
     "expert_cf": 0.99,
     "status_match": "SESUAI",
     "final_decision": "Terdiagnosis: Karat (Sangat yakin, CF = 0.99)",
-    "image_url": null
+    "image_url": null,
+    "cnn_probabilities": null,
+    "results": null
   },
   {
     "timestamp": "2026-11-28 02:15:07",
@@ -107,7 +151,9 @@
     "expert_cf": 0.994,
     "status_match": "SESUAI",
     "final_decision": "Terdiagnosis: Karat (Sangat yakin, CF = 0.99)",
-    "image_url": null
+    "image_url": null,
+    "cnn_probabilities": null,
+    "results": null
   },
   {
     "timestamp": "2026-11-28 02:09:19",
@@ -118,7 +164,9 @@
     "expert_cf": 0.994,
     "status_match": "SESUAI",
     "final_decision": "Terdiagnosis: Karat (Sangat yakin, CF = 0.99)",
-    "image_url": null
+    "image_url": null,
+    "cnn_probabilities": null,
+    "results": null
   },
   {
     "timestamp": "2026-11-28 02:07:08",
@@ -129,7 +177,9 @@
     "expert_cf": 0.9400000000000001,
     "status_match": "SESUAI",
     "final_decision": "Terdiagnosis: Karat (Sangat yakin, CF = 0.94)",
-    "image_url": null
+    "image_url": null,
+    "cnn_probabilities": null,
+    "results": null
   },
   {
     "timestamp": "2026-11-28 01:55:58",
@@ -140,6 +190,8 @@
     "expert_cf": 0.0,
     "status_match": "MODE PAKAR",
     "final_decision": "",
-    "image_url": null
+    "image_url": null,
+    "cnn_probabilities": null,
+    "results": null
   }
 ]
