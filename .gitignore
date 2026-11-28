@@ -17,3 +17,7 @@ Thumbs.db
 # Model binaries (optional: uncomment if model.keras is too large for GitHub)
 # models/*.keras
 
+# Runtime data & uploads
+backend/data/
+
+

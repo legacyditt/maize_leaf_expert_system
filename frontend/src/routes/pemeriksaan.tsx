@@ -1,9 +1,7 @@
 import { useState } from 'react'
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { ImageUploadCard } from '@/components/diagnosis/ImageUploadCard'
 import { ResultDetailCard } from '@/components/diagnosis/ResultDetailCard'
-import { SymptomWizard } from '@/components/diagnosis/SymptomWizard'
-import { DiagnosisGuide } from '@/components/guide/DiagnosisGuide'
 import {
   evaluateExpertSession,
   type EvaluateResponse,
@@ -11,19 +9,17 @@ import {
 } from '@/lib/api'
 import type { CnnContext } from '@/lib/diagnosis-storage'
 
-type ExamStep = 'guide' | 'upload' | 'symptoms' | 'result'
+type ExamStep = 'examine' | 'result'
 
 export const Route = createFileRoute('/pemeriksaan')({
   component: PemeriksaanPage,
 })
 
 /**
- * Tab 2: Seluruh alur Panduan -> Upload Foto -> Pertanyaan Gejala -> Hasil Akhir
- * berada di dalam satu tab halaman (`/pemeriksaan`).
+ * Tab 2: Alur terpadu Upload Foto + Validasi Gejala dalam 1 halaman -> Hasil Akhir.
  */
 function PemeriksaanPage() {
-  const navigate = useNavigate()
-  const [step, setStep] = useState<ExamStep>('guide')
+  const [step, setStep] = useState<ExamStep>('examine')
   const [cnnCtx, setCnnCtx] = useState<CnnContext>({
     prediction: null,
     fileName: null,
@@ -67,11 +63,11 @@ function PemeriksaanPage() {
     }
   }
 
-  function handleContinueWithCnn(prediction: PredictResponse, fileName: string) {
+  function handleImagePredicted(prediction: PredictResponse, fileName: string) {
     const nextCtx: CnnContext = { prediction, fileName, useCnn: true }
     setCnnCtx(nextCtx)
     setKnown({})
-    setStep('symptoms')
+    setFinalResult(null)
     void runEvaluate({}, nextCtx)
   }
 
@@ -79,7 +75,7 @@ function PemeriksaanPage() {
     const nextCtx: CnnContext = { prediction: null, fileName: null, useCnn: false }
     setCnnCtx(nextCtx)
     setKnown({})
-    setStep('symptoms')
+    setFinalResult(null)
     void runEvaluate({}, nextCtx)
   }
 
@@ -92,7 +88,8 @@ function PemeriksaanPage() {
   function handleRetrySymptoms() {
     setKnown({})
     setFinalResult(null)
-    setStep('symptoms')
+    setExpertState(null)
+    setStep('examine')
     void runEvaluate({}, cnnCtx)
   }
 
@@ -102,36 +99,19 @@ function PemeriksaanPage() {
     setExpertState(null)
     setFinalResult(null)
     setError(null)
-    setStep('upload')
+    setStep('examine')
   }
 
-  if (step === 'guide') {
-    return (
-      <DiagnosisGuide
-        onStart={() => setStep('upload')}
-        onOpenHistory={() => void navigate({ to: '/riwayat' })}
-      />
-    )
-  }
-
-  if (step === 'upload') {
+  if (step === 'examine') {
     return (
       <ImageUploadCard
-        onContinueWithCnn={handleContinueWithCnn}
+        expertState={expertState}
+        expertLoading={loading}
+        expertError={error}
+        hasStarted={cnnCtx.useCnn || expertState !== null || loading}
+        onImagePredicted={handleImagePredicted}
         onSkipToExpert={handleSkipToExpert}
-      />
-    )
-  }
-
-  if (step === 'symptoms') {
-    return (
-      <SymptomWizard
-        cnnCtx={cnnCtx}
-        state={expertState}
-        loading={loading}
-        error={error}
         onAnswer={handleAnswer}
-        onBackToUpload={() => setStep('upload')}
       />
     )
   }
@@ -147,4 +127,3 @@ function PemeriksaanPage() {
     />
   )
 }
-
