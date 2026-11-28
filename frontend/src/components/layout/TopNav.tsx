@@ -1,17 +1,14 @@
-import { Link, useRouterState } from '@tanstack/react-router'
-import { cn } from '@/lib/utils'
+import { Link } from '@tanstack/react-router'
 
-/** Top navigation bar dengan logo daun jagung MaizeCare. */
+/** Header minimal tanpa tab navigasi karena hanya ada 1 halaman pemeriksaan. */
 export function TopNav() {
-  const pathname = useRouterState({ select: (s) => s.location.pathname })
-  const isDiagnosisFlow = pathname === '/' || pathname === '/diagnosis'
-  const isResult = pathname === '/hasil'
-  const isHistory = pathname === '/riwayat'
-
   return (
     <header className="sticky top-0 z-30 border-b border-[#E4E4DF] bg-white">
       <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
-        <Link to="/" className="flex items-center gap-2.5 text-[#111814] no-underline">
+        <Link
+          to="/pemeriksaan"
+          className="flex items-center gap-2.5 text-[#111814] no-underline"
+        >
           <svg
             width="24"
             height="28"
@@ -37,44 +34,6 @@ export function TopNav() {
             MaizeCare
           </span>
         </Link>
-
-        <nav className="flex items-center gap-7 text-sm">
-          <Link
-            to="/"
-            className={cn(
-              'py-5 transition-colors',
-              isDiagnosisFlow
-                ? 'border-b-2 border-[#1B4332] font-semibold text-[#111814]'
-                : 'text-zinc-500 hover:text-[#111814]',
-            )}
-          >
-            Diagnosis
-          </Link>
-          <Link
-            to="/hasil"
-            className={cn(
-              'py-5 transition-colors',
-              isResult
-                ? 'border-b-2 border-[#1B4332] font-semibold text-[#111814]'
-                : 'text-zinc-500 hover:text-[#111814]',
-            )}
-          >
-            Hasil Terakhir
-          </Link>
-          <Link
-            to="/riwayat"
-            className={cn(
-              'py-5 transition-colors',
-              isHistory
-                ? 'border-b-2 border-[#1B4332] font-semibold text-[#111814]'
-                : 'text-zinc-500 hover:text-[#111814]',
-            )}
-          >
-            Riwayat
-          </Link>
-        </nav>
-
-        <span className="text-xs font-medium text-zinc-500">Mode User</span>
       </div>
     </header>
   )

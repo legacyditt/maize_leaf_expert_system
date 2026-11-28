@@ -4,13 +4,13 @@ import type { EvaluateResponse } from '@/lib/api'
 import type { CnnContext } from '@/lib/diagnosis-storage'
 
 const SYMPTOM_HINTS: Record<string, string> = {
-  G1: 'Ciri khas common rust: bintik serbuk cokelat kemerahan yang mudah menempel jika disentuh.',
-  G2: 'Terjadi pada infeksi berat ketika jaringan daun mulai menguning atau mengering.',
-  G3: 'Periksa permukaan atas dan bawah daun jagung untuk memastikan sebaran pustula.',
-  G4: 'Ciri khas Northern Corn Leaf Blight (NCLB): bercak memanjang seperti cerutu.',
-  G5: 'Gejala awal hawar daun sebelum lesi membesar dan mengering.',
-  G6: 'Permukaan daun tampak bersih tanpa bercak nekrotik atau perubahan warna.',
-  G7: 'Tidak terlihat benjolan spora karat maupun lesi memanjang hawar.',
+  G1: 'Ciri khas karat daun: bintik serbuk cokelat kemerahan yang mudah menempel jika disentuh.',
+  G2: 'Biasanya terlihat bila serangan sudah meluas hingga warna daun memudar atau mengering.',
+  G3: 'Periksa sisi atas dan balik daun jagung untuk memastikan sebaran bintik serbuk.',
+  G4: 'Ciri khas hawar daun: bercak memanjang berbentuk elips atau seperti cerutu.',
+  G5: 'Sering muncul sebagai bercak tahap awal sebelum melebar dan mengering.',
+  G6: 'Daun terlihat hijau normal tanpa bintik cokelat ataupun bercak memanjang.',
+  G7: 'Seluruh helai daun tampak segar dan utuh.',
 }
 
 interface SymptomWizardProps {
@@ -23,7 +23,7 @@ interface SymptomWizardProps {
 }
 
 /**
- * Halaman 2 User: Kuesioner interaktif Backward Chaining + Certainty Factor.
+ * Halaman 2 User: Kuesioner interaktif pemeriksaan kondisi daun jagung.
  */
 export function SymptomWizard({
   cnnCtx,
@@ -43,17 +43,16 @@ export function SymptomWizard({
           <p className="text-xs font-medium text-zinc-500">
             Langkah 2 dari 3 •{' '}
             {cnnCtx.useCnn && cnnCtx.prediction
-              ? `Target CNN: ${cnnCtx.prediction.label} (${(cnnCtx.prediction.confidence * 100).toFixed(1)}%)`
-              : 'Penelusuran Penuh'}
+              ? `Dugaan Awal Foto: ${cnnCtx.prediction.label} (${(cnnCtx.prediction.confidence * 100).toFixed(1)}%)`
+              : 'Pemeriksaan Menyeluruh'}
           </p>
-          <h1 className="mt-1 text-2xl font-bold tracking-tight text-zinc-950">
-            Validasi Gejala Daun
+          <h1 className="mt-1 text-2xl font-bold tracking-tight text-[#111814]">
+            Pemeriksaan Kondisi Daun
           </h1>
         </div>
         {state && (
           <span className="font-mono text-xs text-zinc-500">
-            CF {state.current_cf >= 0 ? '+' : ''}
-            {state.current_cf.toFixed(3)}
+            Keyakinan {Math.max(0, state.current_cf * 100).toFixed(0)}%
           </span>
         )}
       </div>
@@ -73,8 +72,8 @@ export function SymptomWizard({
         ) : (
           <div className="space-y-6">
             <div className="flex items-center justify-between text-xs text-zinc-500">
-              <span className="font-mono font-medium text-[#1B4332]">
-                {factId} / {goal}
+              <span className="font-medium text-[#1B4332]">
+                Pemeriksaan Kondisi · {goal}
               </span>
               {state?.step_index && state?.total_steps && (
                 <span>
@@ -99,7 +98,7 @@ export function SymptomWizard({
                 onClick={() => onAnswer(factId, 'ya')}
                 className="flex cursor-pointer items-center justify-between rounded-lg border border-[#1B4332] bg-[#1B4332] px-5 py-3.5 text-left text-white transition-colors hover:bg-[#143326] active:scale-[0.99] disabled:opacity-50"
               >
-                <span className="text-sm font-semibold">Ya, Gejala Terlihat</span>
+                <span className="text-sm font-semibold">Ya, Benar</span>
                 <Check className="h-4 w-4" />
               </button>
 
@@ -109,7 +108,7 @@ export function SymptomWizard({
                 onClick={() => onAnswer(factId, 'tidak')}
                 className="flex cursor-pointer items-center justify-between rounded-lg border border-[#E4E4DF] bg-white px-5 py-3.5 text-left text-[#111814] transition-colors hover:bg-[#F8F7F4] active:scale-[0.99] disabled:opacity-50"
               >
-                <span className="text-sm font-medium">Tidak Ditemukan</span>
+                <span className="text-sm font-medium">Tidak</span>
                 <X className="h-4 w-4 text-zinc-400" />
               </button>
             </div>
@@ -117,16 +116,11 @@ export function SymptomWizard({
         )}
       </div>
 
-      <div className="flex items-center justify-between text-xs text-zinc-500">
+      <div className="flex items-center text-xs text-zinc-500">
         <Button variant="ghost" size="sm" onClick={onBackToUpload}>
           <ArrowLeft className="h-4 w-4" />
           Kembali
         </Button>
-        {state && (
-          <span className="font-mono">
-            MB {state.current_mb.toFixed(3)} · MD {state.current_md.toFixed(3)}
-          </span>
-        )}
       </div>
     </div>
   )

@@ -3,9 +3,12 @@
 from datetime import datetime
 from functools import lru_cache
 from io import BytesIO
+from pathlib import Path
 from typing import Any
+from uuid import uuid4
 
 from fastapi import APIRouter, File, HTTPException, UploadFile, status
+from fastapi.responses import FileResponse
 from PIL import Image
 
 from api.schemas import (
@@ -17,9 +20,10 @@ from api.schemas import (
     PredictResponse,
 )
 from core.cnn_predictor import load_keras_model, predict_image
-from core.config import MODEL_PATH
+from core.config import IMG_SIZE, MODEL_PATH
 from core.expert_system import evaluate_session
 from core.knowledge_store import (
+    DATA_DIR,
     HISTORY_PATH,
     KB_PATH,
     DiagnosisLogEntry,
@@ -27,6 +31,8 @@ from core.knowledge_store import (
     load_diagnosis_history,
     load_knowledge_base,
 )
+
+UPLOADS_DIR: Path = DATA_DIR / "uploads"
 
 router = APIRouter(prefix="/api", tags=["diagnosis"])
 
@@ -61,11 +67,34 @@ async def predict_leaf(file: UploadFile = File(...)) -> PredictResponse:
     except FileNotFoundError as exc:
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(exc)) from exc
 
+    image_url = _save_upload_thumbnail(image)
+
     return PredictResponse(
         label=result.label,
         confidence=result.confidence,
         probabilities=result.probabilities,
+        image_url=image_url,
     )
+
+
+def _save_upload_thumbnail(image: Image.Image) -> str:
+    """Menyimpan thumbnail RGB 256x256 ke disk dan mengembalikan URL relatifnya."""
+    UPLOADS_DIR.mkdir(parents=True, exist_ok=True)
+    filename = f"{uuid4().hex}.jpg"
+    thumb = image.convert("RGB").resize((IMG_SIZE, IMG_SIZE))
+    thumb.save(UPLOADS_DIR / filename, format="JPEG", quality=85)
+    return f"/api/uploads/{filename}"
+
+
+@router.get("/uploads/{filename}")
+def get_uploaded_image(filename: str) -> FileResponse:
+    """Menyajikan thumbnail gambar daun yang pernah diperiksa."""
+    if Path(filename).name != filename:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Nama file tidak valid")
+    target = UPLOADS_DIR / filename
+    if not target.exists():
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Gambar tidak ditemukan")
+    return FileResponse(target, media_type="image/jpeg")
 
 
 @router.post("/expert/evaluate", response_model=EvaluateResponse)
@@ -96,6 +125,9 @@ def evaluate_expert(req: EvaluateRequest) -> EvaluateResponse:
                 expert_cf=state.best.cf if state.best else 0.0,
                 status_match=state.status_match or "MODE PAKAR",
                 final_decision=state.final_decision,
+                image_url=req.image_url,
+                cnn_probabilities=req.cnn_probabilities,
+                results=[r.__dict__ for r in state.results],
             ),
             path=HISTORY_PATH,
         )

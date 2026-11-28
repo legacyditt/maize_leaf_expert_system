@@ -16,13 +16,16 @@ class PredictResponse(BaseModel):
     label: str
     confidence: float
     probabilities: dict[str, float]
+    image_url: str | None = None
 
 
 class EvaluateRequest(BaseModel):
     known: dict[str, str] = Field(default_factory=dict)
     cnn_label: str | None = None
     cnn_confidence: float = 0.0
+    cnn_probabilities: dict[str, float] | None = None
     image_name: str | None = None
+    image_url: str | None = None
     log_history: bool = False
 
 
@@ -78,6 +81,9 @@ class HistoryEntrySchema(BaseModel):
     expert_cf: float
     status_match: str
     final_decision: str
+    image_url: str | None = None
+    cnn_probabilities: dict[str, float] | None = None
+    results: list[HypothesisResultSchema] | None = None
 
 
 class HistoryResponse(BaseModel):

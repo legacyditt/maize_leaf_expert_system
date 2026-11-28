@@ -2,6 +2,7 @@ export interface PredictResponse {
   label: 'Hawar' | 'Karat' | 'Sehat' | string
   confidence: number
   probabilities: Record<string, number>
+  image_url?: string | null
 }
 
 export interface HypothesisResult {
@@ -17,7 +18,9 @@ export interface EvaluateRequest {
   known: Record<string, 'ya' | 'tidak'>
   cnn_label: string | null
   cnn_confidence?: number
+  cnn_probabilities?: Record<string, number> | null
   image_name?: string | null
+  image_url?: string | null
   log_history?: boolean
 }
 
@@ -47,6 +50,9 @@ export interface HistoryEntry {
   expert_cf: number
   status_match: string
   final_decision: string
+  image_url?: string | null
+  cnn_probabilities?: Record<string, number> | null
+  results?: HypothesisResult[] | null
 }
 
 export interface HistoryResponse {
@@ -59,6 +65,13 @@ export interface HistoryResponse {
 
 const API_BASE_URL =
   import.meta.env.VITE_API_URL?.replace(/\/$/, '') ?? 'http://localhost:8000'
+
+/** Mengubah path relatif API (mis. `/api/uploads/xxx.jpg`) menjadi URL lengkap. */
+export function getApiAssetUrl(path?: string | null): string | null {
+  if (!path) return null
+  if (path.startsWith('http://') || path.startsWith('https://')) return path
+  return `${API_BASE_URL}${path}`
+}
 
 /** Mengirim gambar daun jagung ke endpoint FastAPI `/api/predict`. */
 export async function predictLeafImage(file: File): Promise<PredictResponse> {

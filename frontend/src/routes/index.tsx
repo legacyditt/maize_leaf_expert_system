@@ -1,29 +1,17 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { ImageUploadCard } from '@/components/diagnosis/ImageUploadCard'
-import type { PredictResponse } from '@/lib/api'
-import { saveCnnContext } from '@/lib/diagnosis-storage'
+import { UserDashboard } from '@/components/dashboard/UserDashboard'
 
 export const Route = createFileRoute('/')({
-  component: UploadPage,
+  component: DashboardPage,
 })
 
-function UploadPage() {
+function DashboardPage() {
   const navigate = useNavigate()
 
-  function handleContinueWithCnn(prediction: PredictResponse, fileName: string) {
-    saveCnnContext({ prediction, fileName, useCnn: true })
-    void navigate({ to: '/diagnosis' })
-  }
-
-  function handleSkipToExpert() {
-    saveCnnContext({ prediction: null, fileName: null, useCnn: false })
-    void navigate({ to: '/diagnosis' })
-  }
-
   return (
-    <ImageUploadCard
-      onContinueWithCnn={handleContinueWithCnn}
-      onSkipToExpert={handleSkipToExpert}
+    <UserDashboard
+      onStartExam={() => void navigate({ to: '/pemeriksaan' })}
+      onOpenHistory={() => void navigate({ to: '/riwayat' })}
     />
   )
 }

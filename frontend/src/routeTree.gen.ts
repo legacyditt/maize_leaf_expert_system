@@ -10,8 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DiagnosisRouteImport } from './routes/diagnosis'
-import { Route as HasilRouteImport } from './routes/hasil'
+import { Route as PemeriksaanRouteImport } from './routes/pemeriksaan'
 import { Route as RiwayatRouteImport } from './routes/riwayat'
 
 const IndexRoute = IndexRouteImport.update({
@@ -19,14 +18,9 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DiagnosisRoute = DiagnosisRouteImport.update({
-  id: '/diagnosis',
-  path: '/diagnosis',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HasilRoute = HasilRouteImport.update({
-  id: '/hasil',
-  path: '/hasil',
+const PemeriksaanRoute = PemeriksaanRouteImport.update({
+  id: '/pemeriksaan',
+  path: '/pemeriksaan',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RiwayatRoute = RiwayatRouteImport.update({
@@ -37,35 +31,31 @@ const RiwayatRoute = RiwayatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/diagnosis': typeof DiagnosisRoute
-  '/hasil': typeof HasilRoute
+  '/pemeriksaan': typeof PemeriksaanRoute
   '/riwayat': typeof RiwayatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/diagnosis': typeof DiagnosisRoute
-  '/hasil': typeof HasilRoute
+  '/pemeriksaan': typeof PemeriksaanRoute
   '/riwayat': typeof RiwayatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/diagnosis': typeof DiagnosisRoute
-  '/hasil': typeof HasilRoute
+  '/pemeriksaan': typeof PemeriksaanRoute
   '/riwayat': typeof RiwayatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/diagnosis' | '/hasil' | '/riwayat'
+  fullPaths: '/' | '/pemeriksaan' | '/riwayat'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/diagnosis' | '/hasil' | '/riwayat'
-  id: '__root__' | '/' | '/diagnosis' | '/hasil' | '/riwayat'
+  to: '/' | '/pemeriksaan' | '/riwayat'
+  id: '__root__' | '/' | '/pemeriksaan' | '/riwayat'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DiagnosisRoute: typeof DiagnosisRoute
-  HasilRoute: typeof HasilRoute
+  PemeriksaanRoute: typeof PemeriksaanRoute
   RiwayatRoute: typeof RiwayatRoute
 }
 
@@ -78,18 +68,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/diagnosis': {
-      id: '/diagnosis'
-      path: '/diagnosis'
-      fullPath: '/diagnosis'
-      preLoaderRoute: typeof DiagnosisRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/hasil': {
-      id: '/hasil'
-      path: '/hasil'
-      fullPath: '/hasil'
-      preLoaderRoute: typeof HasilRouteImport
+    '/pemeriksaan': {
+      id: '/pemeriksaan'
+      path: '/pemeriksaan'
+      fullPath: '/pemeriksaan'
+      preLoaderRoute: typeof PemeriksaanRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/riwayat': {
@@ -104,8 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DiagnosisRoute: DiagnosisRoute,
-  HasilRoute: HasilRoute,
+  PemeriksaanRoute: PemeriksaanRoute,
   RiwayatRoute: RiwayatRoute,
 }
 export const routeTree = rootRouteImport
